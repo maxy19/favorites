@@ -23,7 +23,7 @@ public class LoggerTraceTest {
                 }
             });
         }
-        service.awaitTermination(1, TimeUnit.SECONDS);
+        service.awaitTermination(10, TimeUnit.SECONDS);
     }
 
     @Test
@@ -38,6 +38,18 @@ public class LoggerTraceTest {
                 return "hello world!!";
             }
         }.execute();
+    }
+    @Test
+    public void test3() {
+        ExecutorService service = Executors.newFixedThreadPool(10);
+        for (int i = 0; i <100 ; i++) {
+            service.execute(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println(Thread.currentThread().getId()+"-"+System.nanoTime());
+                }
+            });
+        }
     }
 
 

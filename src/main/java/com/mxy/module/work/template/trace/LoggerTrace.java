@@ -14,13 +14,12 @@ public class LoggerTrace {
 
     private String bizName;
 
-    private final StringBuffer sb = new StringBuffer();
-
     public LoggerTrace(Class clazz, String bizName) {
-        sb.append(":bizName:").append(bizName).append(":trance:").append(System.currentTimeMillis());
-        threadLocal.set(sb.toString());
-        this.bizName = bizName;
         loggerFactory = LoggerFactory.getLogger(clazz);
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(":bizName:").append(bizName).append(":trance:").append(System.nanoTime());
+        threadLocal.set(buffer.toString());
+        this.bizName = bizName;
     }
 
     public static ThreadLocal<String> getThreadLocal() {
