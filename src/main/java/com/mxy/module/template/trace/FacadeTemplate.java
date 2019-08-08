@@ -1,4 +1,4 @@
-package com.mxy.module.work.template.trace;
+package com.mxy.module.template.trace;
 
 import com.google.common.base.Stopwatch;
 import org.apache.commons.lang3.StringUtils;
