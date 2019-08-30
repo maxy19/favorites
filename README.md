@@ -8,6 +8,7 @@
 ###### 1.4 e.printStackTrace() 锁死问题 (未开始)
 ###### 1.5 Orika vs Dozer vs spring beanCopy(未开始)
 ###### 1.6 Guava Cache (未开始)
+###### 1.7 对象比较工具 (未开始)  
 
 
 #### 2.数据库(mysql)
