@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class LoggerTrace {
 
     public static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
@@ -16,9 +18,13 @@ public class LoggerTrace {
 
     public LoggerTrace(Class clazz, String bizName) {
         loggerFactory = LoggerFactory.getLogger(clazz);
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(":bizName:").append(bizName).append(":trance:").append(System.nanoTime());
-        threadLocal.set(buffer.toString());
+        if (threadLocal.get() == null) {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(":bizName:").append(bizName)
+                  .append(":trance:").append(System.nanoTime())
+                  .append(ThreadLocalRandom.current().nextInt(1000));
+            threadLocal.set(buffer.toString());
+        }
         this.bizName = bizName;
     }
 

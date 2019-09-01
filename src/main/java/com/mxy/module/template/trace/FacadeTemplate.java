@@ -18,10 +18,6 @@ public abstract class FacadeTemplate<T> {
         return loggerTrace;
     }
 
-    public void setLoggerTrace(LoggerTrace loggerTrace) {
-        this.loggerTrace = loggerTrace;
-    }
-
     private String monitorKey;
 
     private String className;
@@ -92,7 +88,7 @@ public abstract class FacadeTemplate<T> {
         this.monitorKey = className + "." + methodName;
         long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
         if (elapsed > 1) {
-            loggerTrace.info("monitoryKey:{}, elapsed:{}", monitorKey, elapsed);
+            //loggerTrace.info("monitoryKey:{}, elapsed:{}", monitorKey, elapsed);
         }
     }
 

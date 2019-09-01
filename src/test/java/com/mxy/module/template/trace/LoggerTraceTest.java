@@ -9,21 +9,27 @@ import java.util.concurrent.TimeUnit;
 
 public class LoggerTraceTest {
 
+    Process process = new ProcessImpl();
+
     @Test
     public void test1() throws InterruptedException {
         ExecutorService service = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             service.execute(() -> {
-                LoggerTrace loggerTrace = new LoggerTrace(LoggerTraceTest.class, "order");
-                loggerTrace.info(Thread.currentThread().getName() + "--test print-->");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                new FacadeTemplate<String>() {
+                    @Override
+                    protected void checkParams() {
+                        getLoggerTrace().info("start check param");
+                    }
+                    @Override
+                    protected String process() {
+                        process.print();
+                        return "hello world!!";
+                    }
+                }.execute();
             });
         }
-        service.awaitTermination(10, TimeUnit.SECONDS);
+        service.awaitTermination(1, TimeUnit.SECONDS);
     }
 
     @Test
@@ -35,6 +41,7 @@ public class LoggerTraceTest {
             }
             @Override
             protected String process() {
+                process.print();
                 return "hello world!!";
             }
         }.execute();
