@@ -6,13 +6,11 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.util.Set;
-
 /**
- * 开发这个工具是为了解决 找出两个对象之间属性的差异 且再使用多个if判断增加代码整洁性
+ * 通过CGLIB比较对象属性差异问题。
  */
 @Slf4j
-public class EqualsPropertyTest {
+public class EqualsPropertiesTest {
     @Test
     public void test1() {
         B b = new B();
@@ -52,13 +50,9 @@ public class EqualsPropertyTest {
         a2.setPass((byte) 200);
         a2.setTag('a');
         a2.setB(b1);
-        //第一次初始化, 之后花费毫秒基本为0
-        for (int i = 0; i < 100; i++) {
-            long start = System.currentTimeMillis();
-            log.info("result = {}", new EqualsProperty<B, B, Set<String>>(b, b1, Sets.newHashSet("china")) {
-            }.invokeByBean());
-            log.info("result = {}", System.currentTimeMillis() - start);
-        }
+        //第一次初始化比较耗时, 之后花费毫秒基本为0
+        log.info("result = {}", new EqualsProperties<B, B>(b, b1, Sets.newHashSet("china")) {
+        }.execute());
     }
 
     @Getter
