@@ -7,7 +7,7 @@
 ##### 1.3 Java 中应用骨架实现 (已完成)
 * 总结：解决多个实现类实现同一个接口方法存在重复CODE问题(委托内部类调用)
 ##### 1.4 Orika vs Dozer vs spring beanCopy(未开始)
-##### 1.5 Guava Cache / Expiring Map (未开始)
+##### 1.5 Guava Cache / Expiring Map (已完成)
 * 总结： Expiring在guavaCache 基础上增加了对KV的过期时间设置，功能更加强大以及灵活。
 ##### 1.6 对象比较工具 (已完成)  
 * 总结：使用cglib获得对象属性速度 > JDK反射 > toJson->toMap 
