@@ -16,18 +16,21 @@ import java.util.function.BiFunction;
 
 /**
  * ###比较两个对象不同的属性###
- *
+ * @author maxy
  * @param <S> 源对象
  * @param <T> 目标对象
+ * @param <R> 返回对象
  */
 @Slf4j
-public abstract class EqualsProperties<S, T> {
+public abstract class AbstractEqualsProperties<S, T, R> {
 
     private Collection collection = null;
 
     private S source;
 
     private T target;
+
+    private R returnValue;
 
     public Collection getCollection() {
         return collection;
@@ -53,12 +56,12 @@ public abstract class EqualsProperties<S, T> {
         this.target = target;
     }
 
-    protected EqualsProperties(S source, T target) {
+    protected AbstractEqualsProperties(S source, T target) {
         this.source = source;
         this.target = target;
     }
 
-    protected EqualsProperties(S source, T target, Collection collection) {
+    protected AbstractEqualsProperties(S source, T target, Collection collection) {
         this.source = source;
         this.target = target;
         this.collection = collection;
@@ -67,6 +70,14 @@ public abstract class EqualsProperties<S, T> {
     protected void baseCheck() {
         Preconditions.checkArgument(source != null);
         Preconditions.checkArgument(target != null);
+    }
+
+    protected void beforeProcess() {
+
+    }
+
+    protected void finallyProcess() {
+
     }
 
     protected Map<String, Object> toMap(Object obj) {
@@ -89,29 +100,39 @@ public abstract class EqualsProperties<S, T> {
         return sourceMap.equals(targetMap);
     }
 
-    public Collection<String> execute() {
+    public R execute() {
         //check param
         try {
             baseCheck();
         } catch (IllegalArgumentException e) {
             log.error("execute#baseCheck throw IllegalArgumentException.", e);
-            return Collections.emptyList();
+            return returnValue;
         }
         try {
+            beforeProcess();
             //analysis
             Map<String, Object> sourceMap = toMap(source);
             Map<String, Object> targetMap = toMap(target);
-            log.info("execute#toMap sourceMap = {} , targetMap = {}.", sourceMap, targetMap);
+            log.info("execute#toMap \n sourceMap = {} \n targetMap = {}.", sourceMap, targetMap);
             //is equals
             if (isEquals(sourceMap, targetMap)) {
-                return Collections.emptyList();
+                log.warn("isEquals#not found diff property \n source = {} \n target = {}.", sourceMap, targetMap);
+                return returnValue;
             }
-            //find
-            return findMatchProperty.apply(sourceMap, targetMap);
+            //main logic
+            final Collection<String> diffProperties = findMatchProperty.apply(sourceMap, targetMap);
+            //after process
+            return afterProcess(diffProperties);
         } catch (Exception e) {
             log.error("execute#baseCheck throw Exception.", e);
+        } finally {
+            finallyProcess();
         }
-        return Collections.emptyList();
+        return returnValue;
+    }
+
+    protected R afterProcess(Collection<String> diffProperties) {
+        return (R) diffProperties;
     }
 
     protected BiFunction<Map<String, Object>, Map<String, Object>, Collection<String>> findMatchProperty = (s, t) -> {

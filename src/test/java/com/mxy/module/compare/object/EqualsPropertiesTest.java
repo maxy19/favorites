@@ -1,10 +1,14 @@
 package com.mxy.module.compare.object;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * 通过CGLIB比较对象属性差异问题。
@@ -21,6 +25,7 @@ public class EqualsPropertiesTest {
         b.setDepart("zs");
         b.setData((byte) 20);
         b.setPower('z');
+        b.setArr(Lists.newArrayList(new C(1,"abcd")));
 
         B b1 = new B();
         b1.setNum(2);
@@ -30,6 +35,7 @@ public class EqualsPropertiesTest {
         b1.setDepart("zs");
         b1.setData((byte) 20);
         b1.setPower('z');
+        b1.setArr(Lists.newArrayList(new C(1,"abd")));
 
         A a = new A();
         a.setAge(1);
@@ -51,8 +57,7 @@ public class EqualsPropertiesTest {
         a2.setTag('a');
         a2.setB(b1);
         //第一次初始化比较耗时, 之后花费毫秒基本为0
-        log.info("result = {}", new EqualsProperties<B, B>(b, b1, Sets.newHashSet("china")) {
-        }.execute());
+       log.info("{}",new AbstractEqualsProperties<B, B,Void>(b, b1) {}.execute());
     }
 
     @Getter
@@ -79,5 +84,24 @@ public class EqualsPropertiesTest {
         private float height;
         private byte data;
         private char power;
+        private List<C> arr = Lists.newArrayList(new C(1,"abcd"));
+    }
+
+    /*@Getter
+    @Setter*/
+    @Data
+    @AllArgsConstructor
+    class C {
+        private int num;
+        private String depart;
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder("C{");
+            sb.append("num=").append(num);
+            sb.append(", depart='").append(depart).append('\'');
+            sb.append('}');
+            return sb.toString();
+        }
     }
 }
