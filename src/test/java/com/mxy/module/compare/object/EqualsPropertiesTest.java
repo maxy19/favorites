@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class EqualsPropertiesTest {
         b.setDepart("zs");
         b.setData((byte) 20);
         b.setPower('z');
-        b.setArr(Lists.newArrayList(new C(1,"abcd")));
+        b.setArr(Lists.newArrayList(new C(1, "abcd")));
 
         B b1 = new B();
         b1.setNum(2);
@@ -35,7 +36,7 @@ public class EqualsPropertiesTest {
         b1.setDepart("zs");
         b1.setData((byte) 20);
         b1.setPower('z');
-        b1.setArr(Lists.newArrayList(new C(1,"abd")));
+        b1.setArr(Lists.newArrayList(new C(1, "abd")));
 
         A a = new A();
         a.setAge(1);
@@ -57,7 +58,17 @@ public class EqualsPropertiesTest {
         a2.setTag('a');
         a2.setB(b1);
         //第一次初始化比较耗时, 之后花费毫秒基本为0
-       log.info("{}",new AbstractEqualsProperties<B, B,Void>(b, b1) {}.execute());
+        //有指定返回值,比较对象全部信息
+        log.info("有指定返回值:{}",  new AbstractEqualsProperties<B, B, List<String>>(b, b1) {
+        }.execute());
+        System.out.println();
+        //如果不想有返回值,可以使用Void占位 比较对象全部信息
+        log.info("没有指定返回值:{}", new AbstractEqualsProperties<B, B, Void>(b, b1) {
+        }.execute());
+        System.out.println();
+        //没有指定返回值,只判断指定值
+        log.info("没有指定返回值,只判断指定值:{}", new AbstractEqualsProperties<B, B, Void>(b, b1,Lists.newArrayList("arr")) {
+        }.execute());
     }
 
     @Getter
@@ -84,7 +95,7 @@ public class EqualsPropertiesTest {
         private float height;
         private byte data;
         private char power;
-        private List<C> arr = Lists.newArrayList(new C(1,"abcd"));
+        private List<C> arr = Lists.newArrayList(new C(1, "abcd"));
     }
 
     /*@Getter
