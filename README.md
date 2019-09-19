@@ -11,8 +11,9 @@
 * 总结： Expiring在guavaCache 基础上增加了对KV的过期时间设置，功能更加强大以及灵活。
 ##### 1.6 对象比较工具 (已完成)  
 * 总结：使用cglib获得对象属性速度 > JDK反射 > toJson->toMap 
+##### 1.7 spring aop vs AspectJ (未开始)  
 
-#### 2.数据库(mysql)
+#### 2.数据库(mysql) (未开始)
 ##### is null 无法命中索引 ? (未开始)
 
 #### 3.缓存
