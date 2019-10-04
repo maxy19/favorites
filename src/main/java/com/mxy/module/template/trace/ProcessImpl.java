@@ -2,9 +2,10 @@ package com.mxy.module.template.trace;
 
 public class ProcessImpl implements Process {
 
-    private LoggerTrace loggerTrace = new LoggerTrace(FacadeTemplate.class,"process");
+    private TraceLogger tLogger = new TraceLogger(ProcessImpl.class,"Process");
+
     @Override
     public void print() {
-        loggerTrace.info("process.....");
+        tLogger.info("process.....");
     }
 }
