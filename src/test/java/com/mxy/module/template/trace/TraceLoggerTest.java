@@ -19,6 +19,11 @@ public class TraceLoggerTest {
         for (int i = 0; i < 5; i++) {
             service.execute(() -> new MiniTrace<String>() {
                 @Override
+                protected void initTraceLogger() {
+                    //使用模板时可以更改原有trace格式
+                    super.initTraceLogger();
+                }
+                @Override
                 public String setBizName() {
                     return "Order";
                 }

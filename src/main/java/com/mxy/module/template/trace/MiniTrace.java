@@ -22,7 +22,7 @@ public abstract class MiniTrace<T> {
     }
 
     public T execute() {
-        initTraceEntity();
+        initTraceLogger();
         return doExecute();
     }
 
@@ -44,7 +44,7 @@ public abstract class MiniTrace<T> {
         }
     }
 
-    private void initTraceEntity() {
+    protected void initTraceLogger() {
         tLogger = new TraceLogger(MiniTrace.class, setBizName());
     }
 
@@ -56,19 +56,20 @@ public abstract class MiniTrace<T> {
     }
 
     protected void validateParam(Object obj, String errMsg) {
+
         if (obj == null) {
             throw new IllegalArgumentException(errMsg);
         }
-        if (obj instanceof String && StringUtils.isBlank((String) obj)) {
+        else if (obj instanceof String && StringUtils.isBlank((String) obj)) {
             throw new IllegalArgumentException(errMsg);
         }
-        if (obj.getClass().isArray() && Array.getLength(obj) == 0) {
+        else if (obj.getClass().isArray() && Array.getLength(obj) == 0) {
             throw new IllegalArgumentException(errMsg);
         }
-        if (obj instanceof Collection && ((Collection<?>) obj).isEmpty()) {
+        else if (obj instanceof Collection && ((Collection<?>) obj).isEmpty()) {
             throw new IllegalArgumentException(errMsg);
         }
-        if (obj instanceof Map && ((Map<?, ?>) obj).isEmpty()) {
+        else if (obj instanceof Map && ((Map<?, ?>) obj).isEmpty()) {
             throw new IllegalArgumentException(errMsg);
         }
     }
