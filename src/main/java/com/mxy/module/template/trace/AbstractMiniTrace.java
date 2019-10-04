@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @param <T>
  */
-public abstract class MiniTrace<T> {
+public abstract class AbstractMiniTrace<T> {
 
     protected TraceLogger tLogger;
 
@@ -45,7 +45,7 @@ public abstract class MiniTrace<T> {
     }
 
     protected void initTraceLogger() {
-        tLogger = new TraceLogger(MiniTrace.class, setBizName());
+        tLogger = new TraceLogger(AbstractMiniTrace.class, setBizName());
     }
 
     protected abstract T process();

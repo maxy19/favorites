@@ -17,7 +17,7 @@ public class TraceLoggerTest {
     public void test() throws InterruptedException {
         ExecutorService service = Executors.newFixedThreadPool(10);
         for (int i = 0; i < 5; i++) {
-            service.execute(() -> new MiniTrace<String>() {
+            service.execute(() -> new AbstractMiniTrace<String>() {
                 @Override
                 protected void initTraceLogger() {
                     //使用模板时可以更改原有trace格式
@@ -43,7 +43,7 @@ public class TraceLoggerTest {
 
     @Test
     public void test2() {
-        new MiniTrace<String>() {
+        new AbstractMiniTrace<String>() {
             @Override
             public String setBizName() {
                 return "Order";
