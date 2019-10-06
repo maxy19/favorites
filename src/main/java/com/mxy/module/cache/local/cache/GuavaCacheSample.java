@@ -1,4 +1,4 @@
-package com.mxy.module.cache;
+package com.mxy.module.cache.local.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

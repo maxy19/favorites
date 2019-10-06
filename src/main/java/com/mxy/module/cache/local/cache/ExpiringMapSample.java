@@ -1,4 +1,4 @@
-package com.mxy.module.cache;
+package com.mxy.module.cache.local.cache;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

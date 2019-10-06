@@ -1,5 +1,6 @@
-package com.mxy.module.cache;
+package com.mxy.module.cache.local.cache;
 
+import com.mxy.module.cache.local.cache.ExpiringMapSample;
 import org.junit.Test;
 
 public class ExpiringMapSampleTest {
