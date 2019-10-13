@@ -32,6 +32,14 @@ public abstract class AbstractEqualsProperties<S, T, R> {
 
     private R returnValue;
 
+    public R getReturnValue() {
+        return returnValue;
+    }
+
+    public void setReturnValue(R returnValue) {
+        this.returnValue = returnValue;
+    }
+
     public Collection getCollection() {
         return collection;
     }
