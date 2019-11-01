@@ -7,7 +7,7 @@ package com.mxy.module.template.facade;
 public class FacadeTemplate {
 
 	public static<T,U> Response<T> execute(ExecuteLogger<U> executeLogger,
-										   BizCallback<T> bizCallback) {
+                                           BizCallback<T> bizCallback) {
 		long start = System.currentTimeMillis();
 		executeLogger.startLog();
 		Response<T> response = Response.getSuccessResponse();

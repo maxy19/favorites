@@ -1,6 +1,8 @@
 package com.mxy.module.template.service;
 
+import com.google.common.collect.Lists;
 import com.mxy.module.template.facade.BusinessException;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,15 +15,25 @@ import java.util.Map;
  * @author maxy26
  */
 @Slf4j
-public abstract class BizTemplate<T> {
+@Data
+public abstract class BizTemplate<T, P> {
 
     private String bizName = "";
 
-    public BizTemplate(String bizName) {
-        this.bizName = bizName;
+    private P [] methodParam = null;
+
+    public BizTemplate(String bizName, P... methodParam) {
+        this.bizName = "[" + bizName + "]";
+        this.methodParam = methodParam;
     }
 
-    protected abstract void checkParams();
+    public BizTemplate(String bizName) {
+        this.bizName = "[" + bizName + "]";
+    }
+
+    protected void checkParams() {
+
+    }
 
     protected abstract T process();
 
@@ -29,11 +41,11 @@ public abstract class BizTemplate<T> {
     }
 
     public T execute() {
-        log.info("execute {} business start.",bizName);
+        log.info("execute {} business and methodParam : [{}] start.", bizName, Lists.newArrayList(methodParam));
         final long start = System.currentTimeMillis();
         final T t = doExecute();
         final long spendTime = System.currentTimeMillis() - start;
-        log.info("execute {} business end and spend time {} ms.", bizName, spendTime);
+        log.info("execute {} business end and spend time {} ms, methodParam:[{}]", bizName, spendTime, Lists.newArrayList(methodParam));
         return t;
     }
 
@@ -52,10 +64,10 @@ public abstract class BizTemplate<T> {
             T result = process();
             return result;
         } catch (BusinessException e) {
-            log.error("find the business exception in the {} process .", bizName, e);
+            log.error("catch the business exception in the {} process .", bizName, e);
             throw e;
         } catch (Exception e) {
-            log.error("find the exception in the {} process .", bizName, e);
+            log.error("catch the exception in the {} process .", bizName, e);
             throw e;
         } finally {
             afterProcess();
