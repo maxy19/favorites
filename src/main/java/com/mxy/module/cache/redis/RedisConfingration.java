@@ -30,7 +30,6 @@ public class RedisConfingration {
 
         // 初始化连接池
         jedisPool = new JedisPool(config, ip, port);
-
     }
 
 }

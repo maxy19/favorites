@@ -9,7 +9,7 @@ public class BizTemplateTest {
     @Test
     public void execute() {
 
-        new BizTemplate<Void>("order") {
+        new BizTemplate<Void,String>("order") {
             @Override
             protected void checkParams() {
                 log.info("参数校验1");

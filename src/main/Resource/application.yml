@@ -1,0 +1,10 @@
+server:
+  port: 7777
+
+singleServerConfig:
+  address: "redis://127.0.0.1:6379"
+  #password: "redis123"
+
+
+
+
