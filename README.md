@@ -25,7 +25,14 @@
 * 总结： 
 ##### 2.0 提升效率开发模板(已完成)
 * 总结： 场景：1.facade包负责控制层使用 
-             2.service包负责服务层使用 
+             2.service包负责服务层使用
+              
+##### 2.1 关于多个子线程运行，其中某个线程异常情况测试(已完成)
+> > 2.1.2 某线程 OOM 其他是否运行
+* 总结： 是 例子：com.mxy.module.thread.JvmMemOOM
+> > 2.1.2 某线程 stackOverFlow 其他是否运行 
+* 总结： 是 例子：com.mxy.module.thread.JvmStackOverflow
+
 
 #### 2.数据库(mysql)  
 ##### 1.1 模拟隔离级别RR场景 (间隙锁原理) 
