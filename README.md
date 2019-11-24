@@ -28,9 +28,9 @@
              2.service包负责服务层使用
               
 ##### 2.1 关于多个子线程运行，其中某个线程异常情况测试(已完成)
-> > 2.1.2 某线程 OOM 其他是否运行
+> > 场景： 某线程 OOM 其他是否运行
 * 总结： 是 例子：com.mxy.module.thread.JvmMemOOM
-> > 2.1.2 某线程 stackOverFlow 其他是否运行 
+> > 场景： 某线程 stackOverFlow 其他是否运行 
 * 总结： 是 例子：com.mxy.module.thread.JvmStackOverflow
 
 
