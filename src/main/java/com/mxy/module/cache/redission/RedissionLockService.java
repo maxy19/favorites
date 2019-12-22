@@ -1,26 +1,21 @@
-package com.mxy.module.cache.redis.redission;
+package com.mxy.module.cache.redission;
 
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Component
-public class RedissionLockDemo {
-
-    @Autowired
-    private RedissonClient redissonClient;
+public class RedissionLockService  {
 
     private int count = 0;
 
-    public String Lock(String key) {
-        RLock rLock = redissonClient.getLock(key);
+    public String Lock(String key, RedissonClient client) {
+        RLock rLock = client.getLock(key);
         try {
-            if (rLock.tryLock(20, 2, TimeUnit.SECONDS)) {
+            //抢锁时间 得到锁后多久过期
+            if (rLock.tryLock(20, 100, TimeUnit.SECONDS)) {
                 log.info("获得锁线程->{}", Thread.currentThread().getName());
                 log.info("获得锁" + rLock.getName());
                 count++;

@@ -1,8 +1,16 @@
 package com.mxy.module.cache.redis;
 
 import org.junit.Test;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
+
+import java.util.Set;
 
 public class RedisClientTest {
+
+    JedisPool jedisPool = RedisClient.getJedisPool();
+    Jedis jedis = jedisPool.getResource();
 
     @Test
     public void createAndConsume() {
@@ -34,8 +42,28 @@ public class RedisClientTest {
     }
 
     @Test
-    public void pipeline() {
-        RedisClient.pipeline();
-        RedisClient.getJedisPool().close();
+    public void Set() throws InterruptedException {
+        JedisPool jedisPool = RedisClient.getJedisPool();
+        Jedis jedis = jedisPool.getResource();
+        jedis.sadd("a","a1");
+        jedis.sadd("a","a2");
+        jedis.sadd("a","null");
+        Set<String> sets = jedis.smembers("a");
+        jedis.expire("a",10);
+        Thread.sleep(11000);
+        sets = jedis.sunion("a");
+        System.out.println("---"+sets.isEmpty());
+        System.out.println(sets.remove("null"));
+        System.out.println(sets);
+    }
+    @Test
+    public void zSet() {
+        Pipeline pipelined = jedis.pipelined();
+        pipelined.zadd("a",5,"a5");
+        pipelined.zadd("a",4,"a4");
+        pipelined.zadd("a",3,"a3");
+        pipelined.sync();
+        System.out.println(RedisClient.zrangeWithScores("a",0,5));
+        System.out.println(RedisClient.zrevrangeByScoreWithScores("a",5,0));
     }
 }

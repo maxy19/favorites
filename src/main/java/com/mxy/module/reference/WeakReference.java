@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * WeakReference， 顾名思义, 是一个弱引用, 当所引用的对象在 JVM 内不再有强引用时, GC 后 weak reference 将会被自动回收
+ * WeakReference， 弱引用 顾名思义, 是一个弱引用, 当所引用的对象在 JVM 内不再有强引用时, GC 后 weak reference 将会被自动回收
  */
 @Slf4j
 public class WeakReference {

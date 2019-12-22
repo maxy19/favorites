@@ -1,17 +1,16 @@
-package com.mxy.module.cache.redis.redission;
+package com.mxy.module.cache.redission;
 
 import io.netty.channel.nio.NioEventLoopGroup;
-import lombok.Data;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import org.springframework.context.annotation.Bean;
 
 
-@Data
 public class RedissionConfig {
 
-    private String address;
+    public static RedissionConfig builder = new RedissionConfig();
+
+    private String address = "redis://127.0.0.1:6379";
     private int connectionMinimumIdleSize = 10;
     private int idleConnectionTimeout = 10000;
     private int pingTimeout = 1000;
@@ -31,13 +30,11 @@ public class RedissionConfig {
     private boolean dnsMonitoring = false;
     private int dnsMonitoringInterval = 5000;
 
-    private int thread; //当前处理核数量 * 2
+    private int thread = Runtime.getRuntime().availableProcessors() - 1;
 
     private String codec = "org.redisson.codec.JsonJacksonCodec";
 
-
-    @Bean
-    public RedissonClient redisson() throws ClassNotFoundException {
+    public RedissonClient redisson() {
         Config config = new Config();
         config.useSingleServer().setAddress(address)
                 .setConnectionMinimumIdleSize(connectionMinimumIdleSize)

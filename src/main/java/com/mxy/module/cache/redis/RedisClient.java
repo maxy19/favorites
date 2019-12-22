@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.Tuple;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 @Slf4j
 public class RedisClient extends RedisConfingration {
@@ -158,26 +158,6 @@ public class RedisClient extends RedisConfingration {
     }
 
     /**
-     * pipelined 提高吞吐量
-     *
-     * @return
-     */
-    public static void pipeline() {
-        Jedis jedis = null;
-
-        try {
-            jedis = jedisPool.getResource();
-            Pipeline pipelined = jedis.pipelined();
-            for (int j = 0; j < 10; j++) {
-                pipelined.set(j + "--0", UUID.randomUUID().toString());
-            }
-            pipelined.sync();
-        } catch (Exception e) {
-            log.error("", e);
-        }
-    }
-
-    /**
      * 根据key 获取对象
      *
      * @param key
@@ -253,6 +233,37 @@ public class RedisClient extends RedisConfingration {
         } catch (Exception e) {
             log.error("", e);
         }
+    }
 
+    public static void zset(String key, double score, String member) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.zadd(key, score, member);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+    }
+
+    public static Set<Tuple> zrangeWithScores(String key, long start, long stop) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zrangeWithScores(key, start, stop);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+        return null;
+    }
+
+    public static Set<Tuple> zrevrangeByScoreWithScores(String key, long start, long stop) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.zrevrangeByScoreWithScores(key, start, stop);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+        return null;
     }
 }

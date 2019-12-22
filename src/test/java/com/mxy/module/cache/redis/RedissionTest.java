@@ -1,39 +1,26 @@
 package com.mxy.module.cache.redis;
 
-import com.mxy.module.TestApplyApplication;
-import com.mxy.module.cache.redis.redission.RedissionLockDemo;
+import com.mxy.module.cache.redission.RedissionConfig;
+import com.mxy.module.cache.redission.RedissionLockService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.annotation.Resource;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.redisson.api.RedissonClient;
 
 @Slf4j
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = TestApplyApplication.class)
 public class RedissionTest {
-    @Resource
-    private RedissionLockDemo redissionLock;
 
+    private RedissionLockService redissionLock = new RedissionLockService();
+    RedissonClient redissonClient = null;
+
+    @Before
+    public void before() {
+        redissonClient = RedissionConfig.builder.redisson();
+    }
 
     @Test
     public void testRedissionLock() {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 10; i++) {
-            executorService.submit(() -> {
-                redissionLock.Lock("lock1");
-            });
-        }
-        while (!executorService.isTerminated()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                log.error("", e);
-            }
-        }
+        String lock = redissionLock.Lock("a", redissonClient);
+        System.out.println(lock);
     }
 }
