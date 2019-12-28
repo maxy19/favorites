@@ -1,64 +1,68 @@
-package com.mxy.module.lock;
+package com.mxy.module.lock.synch;
 
 import lombok.SneakyThrows;
 
 /**
- * 锁住This块
+ * 锁住代码块
  */
-public class SynchronizeThisBlock {
+public class SynchronizeBlock {
 
-    static SynchronizeThisBlock synch1 = new SynchronizeThisBlock();
-    static SynchronizeThisBlock synch2 = new SynchronizeThisBlock();
+
+    private Object synch1 = new Object();
+    private Object synch2 = new Object();
 
     @SneakyThrows
     public static void main(String[] args) {
-        sameObj();
+        SynchronizeBlock synchronizeBlock = new SynchronizeBlock();
+        synchronizeBlock.sameObj();
         Thread.sleep(3000);
-        diffObj();
+        synchronizeBlock.diffObj();
     }
 
-    private static void sameObj() {
+    private void sameObj() {
         System.out.println("==正确的顺序==");
         new Thread(() -> {
             for (int i = 1; i <= 3; i++) {
-                synch1.sendMsg(i);
+                sendMsg(i, synch1);
             }
         }).start();
+
         new Thread(() -> {
             for (int i = 1; i <= 3; i++) {
-                synch1.receiveMsg(i);
+                receiveMsg(i, synch1);
             }
         }).start();
     }
 
     /**
-     * 锁住当前调用该方法对象的引用，不同的引用无法互斥
+     * 持有了不同全局的引用 所以无法互斥
      */
-    private static void diffObj() {
+    private void diffObj() {
         System.out.println("==错误的顺序==");
         new Thread(() -> {
             for (int i = 1; i <= 3; i++) {
-                synch1.sendMsg(i);
+                sendMsg(i, synch1);
             }
         }).start();
+
         new Thread(() -> {
             for (int i = 1; i <= 3; i++) {
-                synch2.receiveMsg(i);
+                receiveMsg(i, synch2);
             }
         }).start();
     }
 
     @SneakyThrows
-    public void sendMsg(int i) {
-        synchronized (this) {
+    public void sendMsg(int i, Object synch) {
+        synchronized (synch) {
             Thread.sleep(100);
             System.out.println("发送第" + i + "条");
         }
     }
 
     @SneakyThrows
-    public void receiveMsg(int i) {
-        synchronized (this) {
+    public void receiveMsg(int i, Object synch) {
+        synchronized (synch) {
             Thread.sleep(100);
             System.out.println("接受第" + i + "条");
         }

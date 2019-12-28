@@ -1,4 +1,4 @@
-package com.mxy.module.lock;
+package com.mxy.module.lock.synch;
 
 import lombok.SneakyThrows;
 
