@@ -13,8 +13,8 @@
 * 总结：使用cglib获得对象属性速度 > JDK反射 > toJson->toMap 
 ##### 1.7 Spring aop vs AspectJ (未开始)
   
-##### 1.8 工具包(进行中)
-> > 完成Sales工具包    
+##### 1.8 工具包(已完成)
+> > 完成Sales工具包
 
 ##### 1.9 spring 重复依赖场景
 > > 1.9.1 set 注入.scope 为 singleton(未开始)
@@ -32,6 +32,8 @@
 * 总结： 是 例子：com.mxy.module.thread.JvmMemOOM
 > > 场景： 某线程 stackOverFlow 其他是否运行 
 * 总结： 是 例子：com.mxy.module.thread.JvmStackOverflow
+
+##### 2.2 Synchronize 方法 对象 静态方法区别 (已完成)
 
 
 #### 2.数据库(mysql)  
