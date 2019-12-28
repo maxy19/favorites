@@ -1,11 +1,12 @@
 package com.mxy.module.cache.redis;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 
-import java.util.Set;
+import java.util.List;
 
 public class RedisClientTest {
 
@@ -42,28 +43,55 @@ public class RedisClientTest {
     }
 
     @Test
-    public void Set() throws InterruptedException {
-        JedisPool jedisPool = RedisClient.getJedisPool();
-        Jedis jedis = jedisPool.getResource();
-        jedis.sadd("a","a1");
-        jedis.sadd("a","a2");
-        jedis.sadd("a","null");
-        Set<String> sets = jedis.smembers("a");
-        jedis.expire("a",10);
-        Thread.sleep(11000);
-        sets = jedis.sunion("a");
-        System.out.println("---"+sets.isEmpty());
-        System.out.println(sets.remove("null"));
-        System.out.println(sets);
+    public void Set() {
+        Pipeline pipelined = jedis.pipelined();
+        //去重
+        pipelined.sadd("key", "v1");
+        pipelined.sadd("key", "v1");
+        pipelined.sync();
+        pipelined.close();
     }
+
+    @Test
+    public void provide() throws InterruptedException {
+        while (true) {
+            int value = RandomUtils.nextInt();
+            this.jedis.lpush("1", value + "");
+            System.out.println("放队列：" + value);
+            Thread.sleep(2000);
+        }
+    }
+
+    @Test
+    public void consumer() {
+        //后面秒 直到拿到值
+        while (true) {
+            List<String> value = this.jedis.blpop("1", "200");
+            System.out.println("出队列：" + value);
+        }
+    }
+
     @Test
     public void zSet() {
         Pipeline pipelined = jedis.pipelined();
-        pipelined.zadd("a",5,"a5");
-        pipelined.zadd("a",4,"a4");
-        pipelined.zadd("a",3,"a3");
+        pipelined.zadd("key", 5, "v5");
+        pipelined.zadd("key", 4, "v4");
+        pipelined.zadd("key", 3, "v3");
         pipelined.sync();
-        System.out.println(RedisClient.zrangeWithScores("a",0,5));
-        System.out.println(RedisClient.zrevrangeByScoreWithScores("a",5,0));
+        System.out.println(RedisClient.zrangeWithScores("key", 0, 5));
+        System.out.println(RedisClient.zrevrangeByScoreWithScores("key", 5, 0));
+        pipelined.close();
+    }
+
+    @Test
+    public void getset() {
+        RedisClient.getset("key", "v1");
+        RedisClient.getset("key", "v2");
+    }
+
+    @Test
+    public void exprieAt() {
+        RedisClient.set("key", 123);
+        RedisClient.expireAt("key", System.currentTimeMillis());
     }
 }

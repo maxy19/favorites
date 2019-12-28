@@ -38,6 +38,26 @@ public class RedisClient extends RedisConfingration {
     }
 
     /**
+     * 向缓存中设置字符串内容
+     *
+     * @param key   key
+     * @param value value
+     * @return
+     * @throws Exception
+     */
+    public static boolean getset(String key, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.getSet(key, value);
+            return true;
+        } catch (Exception e) {
+            log.error("", e);
+            return false;
+        }
+    }
+
+    /**
      * 原子加
      *
      * @param key key
@@ -133,6 +153,22 @@ public class RedisClient extends RedisConfingration {
         try {
             jedis = jedisPool.getResource();
             return jedis.get(key);
+        } catch (Exception e) {
+            log.error("", e);
+            return false;
+        }
+    }
+
+    /**
+     * 时间戳方式存储时间 主从同步时间不一致问题
+     * @param key
+     * @return
+     */
+    public static Object expireAt(String key, long time) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.expireAt(key,time);
         } catch (Exception e) {
             log.error("", e);
             return false;
