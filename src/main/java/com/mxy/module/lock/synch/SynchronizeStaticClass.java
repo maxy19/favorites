@@ -2,7 +2,7 @@ package com.mxy.module.lock.synch;
 
 import lombok.SneakyThrows;
 
-/**
+/** 重点：锁住当前的类对象 级别最大
  *  如果某个synchronized方法是static的，那么当线程访问该方法时，它锁的并不是synchronized方法所在的对象，
  *  而是synchronized方法所在的类所对应的Class对象。Java中，无论一个类有多少个对象，这些对象会对应唯一一个Class对象，
  *  因此当线程分别访问同一个类的两个对象的两个static，synchronized方法时，

@@ -34,6 +34,13 @@
 * 总结： 是 例子：com.mxy.module.thread.JvmStackOverflow
 
 ##### 2.2 Synchronize 方法 对象 静态方法区别 (已完成)
+* 总结：
+>> 1.synchronize 加实例方法与 synchronize(this) 效果一样 都是锁当前实例对象
+
+>> 2.synchronize 加静态方法与 synchronize(类.class) 效果一样 都是锁当前类
+
+>> 3.synchronize(obj) 锁obj对象，是指锁住这个实例对象。
+
 
 
 #### 2.数据库(mysql)  
