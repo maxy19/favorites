@@ -2,13 +2,14 @@ package com.mxy.module.compare.object;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.beans.BeanMap;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,12 +17,15 @@ import java.util.function.BiFunction;
 
 /**
  * ###比较两个对象不同的属性###
- * @author maxy
+ * 注意：入参必须是 Object 或者 Map ,如果是对象请重写equals 与 hashcode
  * @param <S> 源对象
  * @param <T> 目标对象
  * @param <R> 返回对象
+ * @author maxy
  */
 @Slf4j
+@Getter
+@Setter
 public abstract class AbstractEqualsProperties<S, T, R> {
 
     private Collection collection = null;
@@ -31,38 +35,6 @@ public abstract class AbstractEqualsProperties<S, T, R> {
     private T target;
 
     private R returnValue;
-
-    public R getReturnValue() {
-        return returnValue;
-    }
-
-    public void setReturnValue(R returnValue) {
-        this.returnValue = returnValue;
-    }
-
-    public Collection getCollection() {
-        return collection;
-    }
-
-    public void setCollection(Collection collection) {
-        this.collection = collection;
-    }
-
-    public S getSource() {
-        return source;
-    }
-
-    public void setSource(S source) {
-        this.source = source;
-    }
-
-    public T getTarget() {
-        return target;
-    }
-
-    public void setTarget(T target) {
-        this.target = target;
-    }
 
     protected AbstractEqualsProperties(S source, T target) {
         this.source = source;
@@ -89,8 +61,8 @@ public abstract class AbstractEqualsProperties<S, T, R> {
     }
 
     protected Map<String, Object> toMap(Object obj) {
-        if (obj == null) {
-            return Collections.emptyMap();
+        if (obj instanceof Map) {
+            return (Map) obj;
         }
         Map<String, Object> map = Maps.newHashMap();
         BeanMap beanMap = BeanMap.create(obj);
