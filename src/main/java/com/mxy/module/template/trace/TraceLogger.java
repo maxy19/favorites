@@ -1,15 +1,25 @@
 package com.mxy.module.template.trace;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+
 public class TraceLogger {
 
-    public static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
+    private static final InheritableThreadLocal<String> inheritableThreadLocal = new InheritableThreadLocal<>();
 
     private Logger tLogger;
+    //多线程中是否内嵌多线程
+    private boolean isNestedThread = false;
+
+    public TraceLogger(Class clazz) {
+        tLogger = LoggerFactory.getLogger(clazz);
+    }
 
     public TraceLogger(Class clazz, String bizName) {
         tLogger = LoggerFactory.getLogger(clazz);
@@ -18,15 +28,24 @@ public class TraceLogger {
         }
     }
 
+    public TraceLogger(Class clazz, String bizName, boolean isNestedThread) {
+        this(clazz, bizName);
+        if (isNestedThread) {
+            inheritableThreadLocal.set(threadLocal.get());
+        }
+    }
+
     protected String generateFormatTrace(String bizName) {
         return new StringBuffer()
-                  .append(":bizName:").append(bizName)
-                  .append(":trance:").append(System.nanoTime())
-                  .append(ThreadLocalRandom.current().nextInt(1000))
-                  .toString();
+                .append("bizName:").append(bizName)
+                .append(":trance:").append(System.nanoTime())
+                //ThreadLocalRandom.current 为每个线程初始化一个seed 不要设置全局变量否则会出现重复的值
+                .append(ThreadLocalRandom.current().nextInt(1000))
+                .toString();
     }
 
     public static void remove() {
+        inheritableThreadLocal.remove();
         threadLocal.remove();
     }
 
@@ -79,8 +98,10 @@ public class TraceLogger {
     }
 
     private String append(String msg) {
-        return new StringBuffer().append((StringUtils.isEmpty(msg) ? "" : msg))
-                                 .append(threadLocal.get())
-                                 .toString();
+        return new StringBuilder().append((StringUtils.isEmpty(msg) ? "" : msg))
+                                  .append(" [")
+                                  .append(Optional.ofNullable(inheritableThreadLocal.get()).orElse(threadLocal.get()))
+                                  .append("]")
+                                  .toString();
     }
 }

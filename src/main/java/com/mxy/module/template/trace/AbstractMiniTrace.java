@@ -15,14 +15,17 @@ public abstract class AbstractMiniTrace<T> {
 
     protected TraceLogger tLogger;
 
-    public abstract String setBizName();
+    protected void checkParams() {}
 
-    protected void checkParams() {
+    public AbstractMiniTrace() {}
 
+    public T execute(String bizName, boolean nestedThread) {
+        initTraceLogger(bizName, nestedThread);
+        return doExecute();
     }
 
-    public T execute() {
-        initTraceLogger();
+    public T execute(String bizName) {
+        initTraceLogger(bizName,false);
         return doExecute();
     }
 
@@ -44,8 +47,8 @@ public abstract class AbstractMiniTrace<T> {
         }
     }
 
-    protected void initTraceLogger() {
-        tLogger = new TraceLogger(AbstractMiniTrace.class, setBizName());
+    protected void initTraceLogger(String bizName, boolean nestedThread) {
+        tLogger = new TraceLogger(AbstractMiniTrace.class, bizName, nestedThread);
     }
 
     protected abstract T process();
@@ -59,17 +62,13 @@ public abstract class AbstractMiniTrace<T> {
 
         if (obj == null) {
             throw new IllegalArgumentException(errMsg);
-        }
-        else if (obj instanceof String && StringUtils.isBlank((String) obj)) {
+        } else if (obj instanceof String && StringUtils.isBlank((String) obj)) {
             throw new IllegalArgumentException(errMsg);
-        }
-        else if (obj.getClass().isArray() && Array.getLength(obj) == 0) {
+        } else if (obj.getClass().isArray() && Array.getLength(obj) == 0) {
             throw new IllegalArgumentException(errMsg);
-        }
-        else if (obj instanceof Collection && ((Collection<?>) obj).isEmpty()) {
+        } else if (obj instanceof Collection && ((Collection<?>) obj).isEmpty()) {
             throw new IllegalArgumentException(errMsg);
-        }
-        else if (obj instanceof Map && ((Map<?, ?>) obj).isEmpty()) {
+        } else if (obj instanceof Map && ((Map<?, ?>) obj).isEmpty()) {
             throw new IllegalArgumentException(errMsg);
         }
     }
