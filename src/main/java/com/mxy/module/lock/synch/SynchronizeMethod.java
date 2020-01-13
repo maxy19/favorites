@@ -3,7 +3,8 @@ package com.mxy.module.lock.synch;
 import lombok.SneakyThrows;
 
 /**
- * 加载方法上，锁住当前实例对象
+ * 加载方法上，锁住当前实例对象的引用 与this 一样 相当于堆空间new出来一块区域 如果不同对象 则相当于两块区域 不相干的话就会锁不住
+ * 所以必须相同实例引用才行
  */
 public class SynchronizeMethod {
 
