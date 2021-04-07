@@ -29,9 +29,9 @@
               
 ##### 2.1 关于多个子线程运行，其中某个线程异常情况测试(已完成)
 > > 场景： 某线程 OOM 其他是否运行
-* 总结： 是 例子：com.mxy.module.thread.JvmMemOOM
+* 总结： 例子：com.mxy.module.thread.JvmMemOOM
 > > 场景： 某线程 stackOverFlow 其他是否运行 
-* 总结： 是 例子：com.mxy.module.thread.JvmStackOverflow
+* 总结： 例子：com.mxy.module.thread.JvmStackOverflow
 
 ##### 2.2 Synchronize 方法 对象 静态方法区别 (已完成)
 * 总结：
