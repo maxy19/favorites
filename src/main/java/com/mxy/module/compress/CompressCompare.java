@@ -1,5 +1,7 @@
 package com.mxy.module.compress;
 
+import com.github.luben.zstd.Zstd;
+
 import java.io.IOException;
 
 public class CompressCompare {
@@ -20,6 +22,18 @@ public class CompressCompare {
         System.out.println("解压后值:" + value);
         System.out.println("解压后长度:" + uncompress.length);
         System.out.println("解压耗时:" + (System.currentTimeMillis() - begin2) + "ms");
+        System.out.println("==========zstd==========");
+        long begin3 = System.currentTimeMillis();
+        byte[] zstdBytes = Zstd.compress(compress);
+        System.out.println("压缩耗时:" + (System.currentTimeMillis() - begin3) + "ms");
+        System.out.println("压缩后值:" + zstdBytes);
+        System.out.println("压缩后长度:" + zstdBytes.length);
+        System.out.println("==========zstd==========");
+        long begin4 = System.currentTimeMillis();
+        byte[] decompress = Zstd.decompress(zstdBytes, compress.length);
+        System.out.println("解压耗时:" + (System.currentTimeMillis() - begin4) + "ms");
+        System.out.println("解压后值:" + decompress);
+        System.out.println("解压后长度:" + decompress.length);
     }
 
     public static byte[] compress(byte srcBytes[]) throws IOException {
